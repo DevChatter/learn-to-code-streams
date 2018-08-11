@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace _2018_08_11
 {
@@ -6,29 +7,38 @@ namespace _2018_08_11
     {
         static void Main(string[] args)
         {
-            Cat myCat = new Cat();
-            myCat.LitterBoxLocation = "Basement";
-            GreetUsingName(myCat);
+            Console.WriteLine("Please choose what to record:");
+            Console.WriteLine("1) Cat");
+            Console.WriteLine("2) Dog");
+            Console.WriteLine("3) Baby");
 
-            Dog myDog = new Dog();
-            GreetUsingName(myDog);
-            TakeForWalk(myDog);
+            int selection = int.Parse(Console.ReadLine());
 
-            Baby myBaby = new Baby();
-            myBaby.Birthdate = new DateTime(1902, 8, 10);
-            GreetUsingName(myBaby);
-            TakeForWalk(myBaby);
-            Console.WriteLine(myBaby.Birthdate.ToShortDateString());
-        }
+            Console.WriteLine($"You chose {selection}.");
+            
+            List<INameable> nameables = new List<INameable>();
+            switch (selection)
+            {
+                case 1:
+                    var cat = new Cat();
+                    nameables.Add(cat);
+                    break;
+                case 2:
+                    var dog = new Dog();
+                    nameables.Add(dog);
+                    break;
+                case 3:
+                    var baby = new Baby();
+                    nameables.Add(baby);
+                    break;
+                default:
+                    throw new Exception();
+            }
 
-        static void GreetUsingName(INameable nameable)
-        {
-            Console.WriteLine($"Hello, {nameable.GetName()}!");
-        }
-
-        static void TakeForWalk(IWalkable walkable)
-        {
-            walkable.GoForWalk();
+            foreach (INameable named in nameables)
+            {
+                Console.WriteLine($"Hello, {named.GetName()}!");
+            }
         }
     }
 
@@ -69,10 +79,6 @@ namespace _2018_08_11
 
     public class Baby : IWalkable, INameable
     {
-        public DateTime Birthdate { get; set; }
-        public int HeightInInches { get; set; }
-        public int HeightInCentimeters { get; set; }
-
         public void GoForWalk()
         {
             Console.WriteLine("Goo goo! Gaa gaa! I'm in a stroller!");
